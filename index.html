@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera and Mic Access</title>
+    <style>
+        /* A little styling to center things */
+        body { font-family: sans-serif; text-align: center; padding: 20px; }
+        video { border: 2px solid #333; border-radius: 8px; background-color: #000; }
+        button { padding: 10px 20px; font-size: 16px; cursor: pointer; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+    <h2>Live Media Stream 🎥</h2>
+    
+    <video id="webcam" autoplay playsinline width="640" height="480"></video>
+    
+    <br>
+    <button id="startBtn">Enable Camera & Mic</button>
+
+    <script>
+        // 1. Select the elements from the HTML
+        const videoElement = document.getElementById('webcam');
+        const startButton = document.getElementById('startBtn');
+
+        // 2. Define what happens when the button is clicked
+        startButton.addEventListener('click', async () => {
+            try {
+                // 3. Request permission for video and audio
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: true, 
+                    audio: true 
+                });
+                
+                // 4. Connect the hardware stream to the <video> tag
+                videoElement.srcObject = stream;
+                
+                // Optional: Disable button after access is granted
+                startButton.disabled = true;
+                startButton.innerText = "Access Granted";
+
+            } catch (error) {
+                // 5. Handle errors (e.g., user denied permission)
+                console.error("Error accessing media devices.", error);
+                alert("Permission denied or device not found.");
+            }
+        });
+    </script>
+</body>
+</html>
